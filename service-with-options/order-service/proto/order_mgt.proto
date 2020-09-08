@@ -12,10 +12,6 @@ extend google.protobuf.ServiceOptions {
   string oauth2Provider = 50003;
 }
 
-message OAuth2Provider {
-  string url = 5001;
-}
-
 // custom method options
 extend google.protobuf.MethodOptions {
   int32 throttling_tier_per_min = 50001;
