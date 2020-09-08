@@ -14,8 +14,6 @@ extend google.protobuf.ServiceOptions {
 
 message OAuth2Provider {
   string url = 5001;
-  string username = 5002;
-  string password = 5003;
 }
 
 // custom method options
@@ -30,7 +28,7 @@ extend google.protobuf.FieldOptions {
 }
 
 service OrderManagement {
-  option(oauth2Provider) = "https://localhost:9095/oauth2/introspect";
+  option(oauth2Provider) = "https://localhost:9444/oauth2/introspect";
 
   rpc addOrder(Order) returns (google.protobuf.StringValue) {
     option(throttling_tier_per_min) = 10000;
@@ -42,4 +40,7 @@ service OrderManagement {
 message Order {
   string id = 1;
   string destination = 5 [(ecommerce.sensitive) = true];
+  repeated string items = 2;
+  float price = 4;
+  string description = 3;
 }
