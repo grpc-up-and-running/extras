@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/descriptor.proto";
+
+package ecommerce;
+
+option go_package = ".;ecommerce";
+
+// custom service options
+extend google.protobuf.ServiceOptions {
+  string oauth2Provider = 50003;
+}
+
+message OAuth2Provider {
+  string url = 5001;
+  string username = 5002;
+  string password = 5003;
+}
+
+// custom method options
+extend google.protobuf.MethodOptions {
+  int32 throttling_tier_per_min = 50001;
+  string scopes = 50002;
+}
+
+// custom field options
+extend google.protobuf.FieldOptions {
+  bool sensitive = 50000;
+}
+
+service OrderManagement {
+  option(oauth2Provider) = "https://localhost:9095/oauth2/introspect";
+
+  rpc addOrder(Order) returns (google.protobuf.StringValue) {
+    option(throttling_tier_per_min) = 10000;
+    option(scopes) = "scope1,scope2";
+  }
+  rpc getOrder(google.protobuf.StringValue) returns (Order);
+}
+
+message Order {
+  string id = 1;
+  string destination = 5 [(ecommerce.sensitive) = true];
+}
